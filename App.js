@@ -1,5 +1,11 @@
 import React, { Component } from "react";
-import { Platform, StyleSheet, Text, View, TouchableOpacity } from "react-native";
+import {
+  Platform,
+  StyleSheet,
+  Text,
+  View,
+  TouchableOpacity
+} from "react-native";
 import { Camera } from "expo-camera";
 import * as Permissions from "expo-permissions";
 import {
@@ -26,6 +32,24 @@ export default class App extends Component {
     this.setState({ hasPermission: status === "granted" });
   }
 
+  handleCameraType = () => {
+    const { cameraType } = this.state;
+
+    this.setState({
+      cameraType:
+        cameraType === Camera.Constants.Type.back
+          ? Camera.Constants.Type.front
+          : Camera.Constants.Type.back
+    });
+  };
+
+  takePicture = async () => {
+    if (this.camera) {
+      let photo = await this.camera.takePictureAsync();
+      if (photo) alert(photo)
+    }
+  }
+
   render() {
     const { hasPermission } = this.state;
     if (hasPermission === null) {
@@ -35,7 +59,13 @@ export default class App extends Component {
     } else {
       return (
         <View style={{ flex: 1 }}>
-          <Camera style={{ flex: 1 }} type={this.state.cameraType}>
+          <Camera
+            style={{ flex: 1 }}
+            type={this.state.cameraType}
+            ref={ref => {
+              this.camera = ref;
+            }}
+          >
             <View
               style={{
                 flex: 1,
@@ -62,6 +92,7 @@ export default class App extends Component {
                   alignItems: "center",
                   backgroundColor: "transparent"
                 }}
+                onPress={() => this.takePicture()}
               >
                 <FontAwesome
                   name="camera"
@@ -74,6 +105,7 @@ export default class App extends Component {
                   alignItems: "center",
                   backgroundColor: "transparent"
                 }}
+                onPress={() => this.handleCameraType()}
               >
                 <MaterialCommunityIcons
                   name="camera-switch"
@@ -87,22 +119,3 @@ export default class App extends Component {
     }
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "#F5FCFF"
-  },
-  welcome: {
-    fontSize: 20,
-    textAlign: "center",
-    margin: 10
-  },
-  instructions: {
-    textAlign: "center",
-    color: "#333333",
-    marginBottom: 5
-  }
-});
