@@ -8,6 +8,7 @@ import {
 } from "react-native";
 import { Camera } from "expo-camera";
 import * as Permissions from "expo-permissions";
+import * as ImagePicker from 'expo-image-picker';
 import {
   FontAwesome,
   Ionicons,
@@ -28,9 +29,21 @@ export default class App extends Component {
   };
 
   async componentDidMount() {
-    const { status } = await Permissions.askAsync(Permissions.CAMERA);
-    this.setState({ hasPermission: status === "granted" });
-  }
+    this.getPermissionAsync()
+  }  
+  getPermissionAsync = async () => {
+      // Camera roll Permission 
+      if (Platform.OS === 'ios') {
+        const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
+        if (status !== 'granted') {
+          alert('Sorry, we need camera roll permissions to make this work!');
+        }
+      }
+      // Camera Permission
+      const { status } = await Permissions.askAsync(Permissions.CAMERA);
+      this.setState({ hasPermission: status === 'granted' });
+    }
+  
 
   handleCameraType = () => {
     const { cameraType } = this.state;
@@ -48,6 +61,12 @@ export default class App extends Component {
       let photo = await this.camera.takePictureAsync();
       if (photo) alert(photo)
     }
+  }
+
+  pickImage = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+    });
   }
 
   render() {
@@ -80,6 +99,7 @@ export default class App extends Component {
                   alignItems: "center",
                   backgroundColor: "transparent"
                 }}
+                onPress={() => this.pickImage()}
               >
                 <Ionicons
                   name="ios-photos"
