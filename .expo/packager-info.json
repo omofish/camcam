@@ -1,10 +1,10 @@
 {
   "devToolsPort": 19002,
   "expoServerPort": 19000,
-  "packagerPort": 19003,
-  "packagerPid": 26664,
-  "expoServerNgrokUrl": "https://gh-sbk.omofish.camcam.exp.direct",
-  "packagerNgrokUrl": "https://packager.gh-sbk.omofish.camcam.exp.direct",
-  "ngrokPid": 9016,
+  "packagerPort": 19001,
+  "packagerPid": 2172,
+  "expoServerNgrokUrl": "https://yi-28p.omofish.camcam.exp.direct",
+  "packagerNgrokUrl": "https://packager.yi-28p.omofish.camcam.exp.direct",
+  "ngrokPid": 3144,
   "webpackServerPort": 19006
 }
